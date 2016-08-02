@@ -40,8 +40,6 @@
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar printButton:(UIButton *)button;
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar emailButton:(UIButton *)button;
 - (void)tappedInToolbar:(ReaderMainToolbar *)toolbar markButton:(UIButton *)button;
-// new single/double page control
-- (void)tappedInToolbar:(ReaderMainToolbar *)toolbar showControl:(UISegmentedControl *)control;
 
 @end
 

@@ -279,26 +279,6 @@
         
         BOOL useTint = [self respondsToSelector:@selector(tintColor)]; // iOS 7 and up
 
-        //don't show viewmode for single page documents
-        if ([document.pageCount intValue] > 1)
-        {
-        rightButtonX -= (SHOW_CONTROL_WIDTH + buttonSpacing); // Next position
-        
-        UISegmentedControl *showControl = [[UISegmentedControl alloc] initWithItems:buttonItems];
-        showControl.frame = CGRectMake(rightButtonX, BUTTON_Y, SHOW_CONTROL_WIDTH, BUTTON_HEIGHT);
-        showControl.tintColor = (useTint ? [UIColor blackColor] : [UIColor colorWithWhite:0.8f alpha:1.0f]);
-        showControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        showControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        showControl.selectedSegmentIndex = 0; // Default segment index
-        //showControl.backgroundColor = [UIColor grayColor];
-        showControl.exclusiveTouch = YES;
-        
-        [showControl addTarget:self action:@selector(showControlTapped:) forControlEvents:UIControlEventValueChanged];
-        
-        [self addSubview:showControl];
-        //adjust available width for document title
-        titleWidth -= (SHOW_CONTROL_WIDTH + buttonSpacing);
-        }
         
         if (largeDevice == YES) // Show document filename in toolbar
         {
@@ -328,13 +308,6 @@
     }
     
     return self;
-}
-
-#pragma mark - UISegmentedControl action methods
-
-- (void)showControlTapped:(UISegmentedControl *)control
-{
-    [self.delegate tappedInToolbar:self showControl:control];
 }
 
 @end

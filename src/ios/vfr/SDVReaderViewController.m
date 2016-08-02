@@ -1398,49 +1398,4 @@
 #endif // end of READER_ENABLE_THUMBS Option
 }
 
-//new segmented control single/double page/cover
-- (void)tappedInToolbar:(ReaderMainToolbar *)toolbar showControl:(UISegmentedControl *)control
-{
-    switch (control.selectedSegmentIndex)
-    {
-        case 0: // single page
-        {
-            NSLog(@"[pdfviewer] single page");
-            self.pagesPerScreen = 1;
-            self.viewMode = SDVReaderContentViewModeSinglePage;
-            break;
-        }
-            
-        case 1: // double page
-        {
-            NSLog(@"[pdfviewer] double page");
-            self.pagesPerScreen = 2;
-            self.viewMode = SDVReaderContentViewModeDoublePage;
-            break;
-        }
-        case 2: // cover
-        {
-            NSLog(@"[pdfviewer] cover mode");
-            self.pagesPerScreen = 1; // this is the minimum value
-            self.viewMode = SDVReaderContentViewModeCoverDoublePage;
-            break;
-        }
-    }
-//    //reset everything
-//    for(UIView *subview in [theScrollView subviews]) {
-//        [subview removeFromSuperview];
-//    }
-//    [self updateContentSize:theScrollView];
-//    [self layoutContentViews:theScrollView];
-//    [self showDocumentPage:currentPage];
-    [self handleLandscapeDoublePage];
-    
-    lastAppearSize = CGSizeZero;
-    
-    // hide thumbs if they are not required
-    if ([document.pageCount integerValue] <= pagesPerScreen) {
-        [mainPagebar hidePagebar]; // Show
-    }
-}
-
 @end

@@ -202,48 +202,6 @@
 
 #pragma mark - ThumbsMainToolbarDelegate methods
 
-- (void)tappedInToolbar:(ThumbsMainToolbar *)toolbar showControl:(UISegmentedControl *)control
-{
-	switch (control.selectedSegmentIndex)
-	{
-		case 0: // Show all page thumbs
-		{
-			showBookmarked = NO; // Show all thumbs
-
-			markedOffset = [theThumbsView insetContentOffset];
-
-			[theThumbsView reloadThumbsContentOffset:thumbsOffset];
-
-			break; // We're done
-		}
-
-		case 1: // Show bookmarked thumbs
-		{
-			showBookmarked = YES; // Only bookmarked
-
-			thumbsOffset = [theThumbsView insetContentOffset];
-
-			if (updateBookmarked == YES) // Update bookmarked list
-			{
-				[bookmarked removeAllObjects]; // Empty the list first
-
-				[document.bookmarks enumerateIndexesUsingBlock: // Enumerate
-					^(NSUInteger page, BOOL *stop)
-					{
-						[bookmarked addObject:[NSNumber numberWithInteger:page]];
-					}
-				];
-
-				markedOffset = CGPointZero; updateBookmarked = NO; // Reset
-			}
-
-			[theThumbsView reloadThumbsContentOffset:markedOffset];
-
-			break; // We're done
-		}
-	}
-}
-
 - (void)tappedInToolbar:(ThumbsMainToolbar *)toolbar doneButton:(UIButton *)button
 {
 	[delegate dismissThumbsViewController:self]; // Dismiss thumbs display

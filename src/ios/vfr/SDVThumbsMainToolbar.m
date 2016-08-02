@@ -14,7 +14,6 @@
 @implementation SDVThumbsMainToolbar
 {
     NSInteger lastSelected;
-    UISegmentedControl *showControl;
 }
 
 #pragma mark - Constants
@@ -84,64 +83,6 @@
         
         titleX += (doneButtonWidth + buttonSpacing); titleWidth -= (doneButtonWidth + buttonSpacing);
         
-//#if (READER_BOOKMARKS == TRUE) // Option
-        CGFloat showControlX = (viewWidth - (SHOW_CONTROL_WIDTH + buttonSpacing));
-        
-        UIImage *thumbsImage = [UIImage imageNamed:@"Reader-Thumbs"];
-        UIImage *bookmarkImage = [UIImage imageNamed:@"Reader-Mark-Y"];
-        UIImage *outlineButton = [UIImage imageNamed:@"SDVReader-Outline"];
-        //Todo: hide bookmark button if option enabled = false
-        NSArray *buttonItems = [NSArray arrayWithObjects:thumbsImage, bookmarkImage, outlineButton, nil];
-        
-        BOOL useTint = [self respondsToSelector:@selector(tintColor)]; // iOS 7 and up
-        
-        showControl = [[UISegmentedControl alloc] initWithItems:buttonItems];
-        showControl.frame = CGRectMake(showControlX, BUTTON_Y, SHOW_CONTROL_WIDTH, BUTTON_HEIGHT);
-        showControl.tintColor = (useTint ? [UIColor blackColor] : [UIColor colorWithWhite:0.8f alpha:1.0f]);
-        showControl.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        showControl.segmentedControlStyle = UISegmentedControlStyleBar;
-        showControl.selectedSegmentIndex = 0; // Default segment index
-        //showControl.backgroundColor = [UIColor grayColor];
-        showControl.exclusiveTouch = YES;
-        
-        //get last selected segment
-        NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-        lastSelected = 0;
-        if([settings objectForKey:@"NavigationViewLastSelectedMode"])
-        {
-            lastSelected = [[settings objectForKey:@"NavigationViewLastSelectedMode"] integerValue];
-        }
-        
-        //deactivate segments if necessary
-        BOOL toolbarOptionBookmarks = [[[options objectForKey: @"bookmarks"] objectForKey: @"enabled"] boolValue];
-        NSLog(@"[pdfviewer] toolbar-options bookmarks: %d", toolbarOptionBookmarks);
-        if (!toolbarOptionBookmarks) {
-            [showControl setEnabled:NO forSegmentAtIndex:1];
-            //reset remembered segment
-            if (lastSelected == 1) {
-                lastSelected = 0;
-            }
-        }
-        BOOL toolbarOptionOutline = [[[options objectForKey: @"outline"] objectForKey: @"enabled"] boolValue];
-        NSLog(@"[pdfviewer] toolbar-options outline: %d", toolbarOptionBookmarks);
-        if (!toolbarOptionOutline) {
-            [showControl setEnabled:NO forSegmentAtIndex:2];
-            //reset remembered segment
-            if (lastSelected == 2) {
-                lastSelected = 0;
-            }
-        }
-        
-        [showControl addTarget:self action:@selector(showControlTapped:) forControlEvents:UIControlEventValueChanged];
-        //set remembered segment
-        showControl.selectedSegmentIndex = lastSelected;
-        
-        [self addSubview:showControl];
-        
-        titleWidth -= (SHOW_CONTROL_WIDTH + buttonSpacing);
-        
-//#endif // end of READER_BOOKMARKS Option
-        
         if (largeDevice == YES) // Show document filename in toolbar
         {
             CGRect titleRect = CGRectMake(titleX, BUTTON_Y, titleWidth, TITLE_HEIGHT);
@@ -174,7 +115,6 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
-    showControl.selectedSegmentIndex = lastSelected;
 }
 
 @end
