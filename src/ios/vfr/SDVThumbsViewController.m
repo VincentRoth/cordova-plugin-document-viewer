@@ -111,23 +111,13 @@
     theThumbsView = [[ReaderThumbsView alloc] initWithFrame:scrollViewRect]; // ReaderThumbsView
     theThumbsView.contentInset = scrollViewInsets; theThumbsView.scrollIndicatorInsets = scrollViewInsets;
     theThumbsView.delegate = self; // ReaderThumbsViewDelegate
-    if ((lastSelected == 0) || (lastSelected == 1)) {
-        theThumbsView.hidden = NO;
-    } else
-    {
-        theThumbsView.hidden = YES;
-    }
+    theThumbsView.hidden = YES;
     
     theOutlineView = [[UITableView alloc] initWithFrame:scrollViewRect]; //TableView for Document outline
     theOutlineView.delegate = self;
     theOutlineView.dataSource = self;
-    if (lastSelected == 2) {
-        theOutlineView.hidden = NO;
-    }
-    else
-    {
-        theOutlineView.hidden = YES;
-    }
+    theOutlineView.hidden = NO;
+    
     [theOutlineView setAutoresizingMask: UIViewAutoresizingFlexibleWidth];
     
     [self.view insertSubview:theThumbsView belowSubview:mainToolbar];
