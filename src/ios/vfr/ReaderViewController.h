@@ -1,9 +1,9 @@
 //
 //	ReaderViewController.h
-//	Reader v2.8.0
+//	Reader v2.7.1
 //
 //	Created by Julius Oklamcak on 2011-07-01.
-//	Copyright © 2011-2014 Julius Oklamcak. All rights reserved.
+//	Copyright © 2011-2013 Julius Oklamcak. All rights reserved.
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,6 @@
 #import <UIKit/UIKit.h>
 
 #import "ReaderDocument.h"
-#import "ReaderMainToolbar.h"
-#import "ReaderMainPagebar.h"
 
 @class ReaderViewController;
 
@@ -36,43 +34,22 @@
 @optional // Delegate protocols
 
 - (void)dismissReaderViewController:(ReaderViewController *)viewController;
+-(void)pageDidChanged:(int)page;
 
 @end
 
 @interface ReaderViewController : UIViewController
-{
-    ReaderDocument *document;
-    
-    UIScrollView *theScrollView;
-    
-    ReaderMainToolbar *mainToolbar;
-    
-    ReaderMainPagebar *mainPagebar;
-    
-    NSMutableDictionary *contentViews;
-    
-    UIUserInterfaceIdiom userInterfaceIdiom;
-    
-    NSInteger currentPage, minimumPage, maximumPage;
-    
-    UIDocumentInteractionController *documentInteraction;
-    
-    UIPrintInteractionController *printInteraction;
-    
-    CGFloat scrollViewOutset;
-    
-    CGSize lastAppearSize;
-    
-    NSDate *lastHideTime;
-    
-    BOOL ignoreDidScroll;
-}
-
 
 @property (nonatomic, weak, readwrite) id <ReaderViewControllerDelegate> delegate;
 
-- (instancetype)initWithReaderDocument:(ReaderDocument *)object;
+- (id)initWithReaderDocument:(ReaderDocument *)object;
 
-- (void)updateContentViews:(UIScrollView *)scrollView;
+- (void)showCurrentPage;
+
+- (void)showDocumentPage:(NSInteger)page force:(BOOL)force;
+
+- (void)updateScrollViewContentSize;
+
+- (void)updateScrollViewContentViews;
 
 @end

@@ -1,9 +1,9 @@
 //
 //	ReaderThumbCache.m
-//	Reader v2.8.0
+//	Reader v2.6.0
 //
 //	Created by Julius Oklamcak on 2011-09-01.
-//	Copyright © 2011-2014 Julius Oklamcak. All rights reserved.
+//	Copyright © 2011-2013 Julius Oklamcak. All rights reserved.
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -33,11 +33,11 @@
 	NSCache *thumbCache;
 }
 
-#pragma mark - Constants
+#pragma mark Constants
 
 #define CACHE_SIZE 2097152
 
-#pragma mark - ReaderThumbCache class methods
+#pragma mark ReaderThumbCache class methods
 
 + (ReaderThumbCache *)sharedInstance
 {
@@ -145,9 +145,9 @@
 	});
 }
 
-#pragma mark - ReaderThumbCache instance methods
+#pragma mark ReaderThumbCache instance methods
 
-- (instancetype)init
+- (id)init
 {
 	if ((self = [super init])) // Initialize
 	{
@@ -171,7 +171,7 @@
 		{
 			object = [NSNull null]; // Return an NSNull thumb placeholder object
 
-			[thumbCache setObject:object forKey:request.cacheKey cost:2]; // Cache the placeholder object
+			//[thumbCache setObject:object forKey:request.cacheKey cost:2]; // Cache the placeholder object
 
 			ReaderThumbFetch *thumbFetch = [[ReaderThumbFetch alloc] initWithRequest:request]; // Create a thumb fetch operation
 

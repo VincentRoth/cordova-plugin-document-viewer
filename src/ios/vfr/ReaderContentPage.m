@@ -1,9 +1,9 @@
 //
 //	ReaderContentPage.m
-//	Reader v2.8.1
+//	Reader v2.7.3
 //
 //	Created by Julius Oklamcak on 2011-07-01.
-//	Copyright © 2011-2014 Julius Oklamcak. All rights reserved.
+//	Copyright © 2011-2013 Julius Oklamcak. All rights reserved.
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -45,14 +45,14 @@
 	CGFloat _pageOffsetY;
 }
 
-#pragma mark - ReaderContentPage class methods
+#pragma mark ReaderContentPage class methods
 
 + (Class)layerClass
 {
 	return [ReaderContentTile class];
 }
 
-#pragma mark - ReaderContentPage PDF link methods
+#pragma mark ReaderContentPage PDF link methods
 
 - (void)highlightPageLinks
 {
@@ -404,29 +404,40 @@
 	return result;
 }
 
-#pragma mark - ReaderContentPage instance methods
+#pragma mark ReaderContentPage instance methods
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame
 {
-	if ((self = [super initWithFrame:frame]))
+	id view = nil; // UIView
+
+	if (CGRectIsEmpty(frame) == false)
 	{
-		self.autoresizesSubviews = NO;
-		self.userInteractionEnabled = NO;
-		self.contentMode = UIViewContentModeRedraw;
-		self.autoresizingMask = UIViewAutoresizingNone;
-		self.backgroundColor = [UIColor clearColor];
+		if ((self = [super initWithFrame:frame]))
+		{
+			self.autoresizesSubviews = NO;
+			self.userInteractionEnabled = NO;
+			self.contentMode = UIViewContentModeRedraw;
+			self.autoresizingMask = UIViewAutoresizingNone;
+			self.backgroundColor = [UIColor clearColor];
+
+			view = self; // Return self
+		}
+	}
+	else // Handle invalid frame size
+	{
+		self = nil;
 	}
 
-	return self;
+	return view;
 }
 
-- (instancetype)initWithURL:(NSURL *)fileURL page:(NSInteger)page password:(NSString *)phrase
+- (id)initWithURL:(NSURL *)fileURL page:(NSInteger)page password:(NSString *)phrase
 {
 	CGRect viewRect = CGRectZero; // View rect
 
 	if (fileURL != nil) // Check for non-nil file URL
 	{
-		_PDFDocRef = CGPDFDocumentCreateUsingUrl((__bridge CFURLRef)fileURL, phrase);
+		_PDFDocRef = CGPDFDocumentCreateX((__bridge CFURLRef)fileURL, phrase);
 
 		if (_PDFDocRef != NULL) // Check for non-NULL CGPDFDocumentRef
 		{
@@ -480,23 +491,28 @@
 			else // Error out with a diagnostic
 			{
 				CGPDFDocumentRelease(_PDFDocRef), _PDFDocRef = NULL;
-
-				NSAssert(NO, @"CGPDFPageRef == NULL");
+				//NSAssert(NO, @"CGPDFPageRef == NULL");
+                DLog(@"CGPDFPageRef == NULL");
+                return nil;
 			}
 		}
 		else // Error out with a diagnostic
 		{
-			NSAssert(NO, @"CGPDFDocumentRef == NULL");
+			//NSAssert(NO, @"CGPDFDocumentRef == NULL");
+            DLog(@"CGPDFDocumentRef == NULL");
+            return nil;
 		}
 	}
 	else // Error out with a diagnostic
 	{
-		NSAssert(NO, @"fileURL == nil");
+		//NSAssert(NO, @"fileURL == nil");
+        DLog(@"File URL = nil");
+        return nil;
 	}
 
-	ReaderContentPage *view = [self initWithFrame:viewRect];
+	id view = [self initWithFrame:viewRect]; // UIView setup
 
-	if (view != nil) [self buildAnnotationLinksList];
+	if (view != nil) [self buildAnnotationLinksList]; // Links
 
 	return view;
 }
@@ -526,7 +542,7 @@
 
 #endif // end of READER_DISABLE_RETINA Option
 
-#pragma mark - CATiledLayer delegate methods
+#pragma mark CATiledLayer delegate methods
 
 - (void)drawLayer:(CATiledLayer *)layer inContext:(CGContextRef)context
 {
@@ -564,21 +580,21 @@
 	CGRect _rect;
 }
 
-#pragma mark - Properties
+#pragma mark Properties
 
 @synthesize rect = _rect;
 @synthesize dictionary = _dictionary;
 
-#pragma mark - ReaderDocumentLink class methods
+#pragma mark ReaderDocumentLink class methods
 
-+ (instancetype)newWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary
++ (id)newWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary
 {
 	return [[ReaderDocumentLink alloc] initWithRect:linkRect dictionary:linkDictionary];
 }
 
-#pragma mark - ReaderDocumentLink instance methods
+#pragma mark ReaderDocumentLink instance methods
 
-- (instancetype)initWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary
+- (id)initWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary
 {
 	if ((self = [super init]))
 	{

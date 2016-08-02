@@ -1,9 +1,9 @@
 //
 //	ReaderContentPage.h
-//	Reader v2.8.0
+//	Reader v2.6.1
 //
 //	Created by Julius Oklamcak on 2011-07-01.
-//	Copyright © 2011-2014 Julius Oklamcak. All rights reserved.
+//	Copyright © 2011-2013 Julius Oklamcak. All rights reserved.
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 
 @interface ReaderContentPage : UIView
 
-- (instancetype)initWithURL:(NSURL *)fileURL page:(NSInteger)page password:(NSString *)phrase;
+- (id)initWithURL:(NSURL *)fileURL page:(NSInteger)page password:(NSString *)phrase;
 
 - (id)processSingleTap:(UITapGestureRecognizer *)recognizer;
 
@@ -45,6 +45,8 @@
 
 @property (nonatomic, assign, readonly) CGPDFDictionaryRef dictionary;
 
-+ (instancetype)newWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary;
++ (id)newWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary;
+
+- (id)initWithRect:(CGRect)linkRect dictionary:(CGPDFDictionaryRef)linkDictionary;
 
 @end

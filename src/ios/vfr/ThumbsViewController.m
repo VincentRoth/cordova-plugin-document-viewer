@@ -1,9 +1,9 @@
 //
 //	ThumbsViewController.m
-//	Reader v2.8.1
+//	Reader v2.7.2
 //
 //	Created by Julius Oklamcak on 2011-09-01.
-//	Copyright © 2011-2014 Julius Oklamcak. All rights reserved.
+//	Copyright © 2011-2013 Julius Oklamcak. All rights reserved.
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,23 @@
 @end
 
 @implementation ThumbsViewController
+{
+	ReaderDocument *document;
 
-#pragma mark - Constants
+	ThumbsMainToolbar *mainToolbar;
+
+	ReaderThumbsView *theThumbsView;
+
+	NSMutableArray *bookmarked;
+
+	CGPoint thumbsOffset;
+	CGPoint markedOffset;
+
+	BOOL updateBookmarked;
+	BOOL showBookmarked;
+}
+
+#pragma mark Constants
 
 #define STATUS_HEIGHT 20.0f
 
@@ -46,29 +61,29 @@
 #define PAGE_THUMB_SMALL 160
 #define PAGE_THUMB_LARGE 256
 
-#pragma mark - Properties
+#pragma mark Properties
 
 @synthesize delegate;
 
-#pragma mark - UIViewController methods
+#pragma mark UIViewController methods
 
-- (instancetype)initWithReaderDocument:(ReaderDocument *)object
+- (id)initWithReaderDocument:(ReaderDocument *)object
 {
-	if ((self = [super initWithNibName:nil bundle:nil])) // Initialize superclass
+	id thumbs = nil; // ThumbsViewController object
+
+	if ((object != nil) && ([object isKindOfClass:[ReaderDocument class]]))
 	{
-		if ((object != nil) && ([object isKindOfClass:[ReaderDocument class]])) // Valid object
+		if ((self = [super initWithNibName:nil bundle:nil])) // Designated initializer
 		{
 			updateBookmarked = YES; bookmarked = [NSMutableArray new]; // Bookmarked pages
 
 			document = object; // Retain the ReaderDocument object for our use
-		}
-		else // Invalid ReaderDocument object
-		{
-			self = nil;
+
+			thumbs = self; // Return an initialized ThumbsViewController object
 		}
 	}
 
-	return self;
+	return thumbs;
 }
 
 - (void)viewDidLoad
@@ -200,14 +215,56 @@
 	[super didReceiveMemoryWarning];
 }
 
-#pragma mark - ThumbsMainToolbarDelegate methods
+#pragma mark ThumbsMainToolbarDelegate methods
+
+- (void)tappedInToolbar:(ThumbsMainToolbar *)toolbar showControl:(UISegmentedControl *)control
+{
+	switch (control.selectedSegmentIndex)
+	{
+		case 0: // Show all page thumbs
+		{
+			showBookmarked = NO; // Show all thumbs
+
+			markedOffset = [theThumbsView insetContentOffset];
+
+			[theThumbsView reloadThumbsContentOffset:thumbsOffset];
+
+			break; // We're done
+		}
+
+		case 1: // Show bookmarked thumbs
+		{
+			showBookmarked = YES; // Only bookmarked
+
+			thumbsOffset = [theThumbsView insetContentOffset];
+
+			if (updateBookmarked == YES) // Update bookmarked list
+			{
+				[bookmarked removeAllObjects]; // Empty the list first
+
+				[document.bookmarks enumerateIndexesUsingBlock: // Enumerate
+					^(NSUInteger page, BOOL *stop)
+					{
+						[bookmarked addObject:[NSNumber numberWithInteger:page]];
+					}
+				];
+
+				markedOffset = CGPointZero; updateBookmarked = NO; // Reset
+			}
+
+			[theThumbsView reloadThumbsContentOffset:markedOffset];
+
+			break; // We're done
+		}
+	}
+}
 
 - (void)tappedInToolbar:(ThumbsMainToolbar *)toolbar doneButton:(UIButton *)button
 {
 	[delegate dismissThumbsViewController:self]; // Dismiss thumbs display
 }
 
-#pragma mark - UIThumbsViewDelegate methods
+#pragma mark UIThumbsViewDelegate methods
 
 - (NSUInteger)numberOfThumbsInThumbsView:(ReaderThumbsView *)thumbsView
 {
@@ -225,7 +282,7 @@
 
 	NSInteger page = (showBookmarked ? [[bookmarked objectAtIndex:index] integerValue] : (index + 1));
 
-	[thumbCell showText:[[NSString alloc] initWithFormat:@"%i", (int)page]]; // Page number place holder
+	[thumbCell showText:[NSString stringWithFormat:@"%i", page]]; // Page number place holder
 
 	[thumbCell showBookmark:[document.bookmarks containsIndex:page]]; // Show bookmarked status
 
@@ -286,11 +343,11 @@
 	CGRect defaultRect;
 }
 
-#pragma mark - Constants
+#pragma mark Constants
 
 #define CONTENT_INSET 8.0f
 
-#pragma mark - ThumbsPageThumb instance methods
+#pragma mark ThumbsPageThumb instance methods
 
 - (CGRect)markRectInImageView
 {
@@ -301,7 +358,7 @@
 	return iconRect; // Frame position rect inside of image view
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame
 {
 	if ((self = [super initWithFrame:frame]))
 	{
@@ -313,7 +370,7 @@
 
 		CGFloat newWidth = ((defaultRect.size.width / 4.0f) * 3.0f);
 
-		CGFloat offsetX = ((defaultRect.size.width - newWidth) * 0.5f);
+		CGFloat offsetX = ((defaultRect.size.width - newWidth) / 2.0f);
 
 		defaultRect.size.width = newWidth; defaultRect.origin.x += offsetX;
 
@@ -387,8 +444,8 @@
 
 - (void)showImage:(UIImage *)image
 {
-	NSInteger x = (self.bounds.size.width * 0.5f);
-	NSInteger y = (self.bounds.size.height * 0.5f);
+	NSInteger x = (self.bounds.size.width / 2.0f);
+	NSInteger y = (self.bounds.size.height / 2.0f);
 
 	CGPoint location = CGPointMake(x, y); // Center point
 

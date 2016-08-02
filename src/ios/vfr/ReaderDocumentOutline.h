@@ -1,9 +1,9 @@
 //
 //	ReaderDocumentOutline.m
-//	Reader v2.8.0
+//	Reader v2.6.1
 //
 //	Created by Julius Oklamcak on 2012-09-01.
-//	Copyright © 2011-2014 Julius Oklamcak. All rights reserved.
+//	Copyright © 2011-2013 Julius Oklamcak. All rights reserved.
 //
 //	Permission is hereby granted, free of charge, to any person obtaining a copy
 //	of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,9 @@
 
 @interface DocumentOutlineEntry : NSObject <NSObject>
 
-+ (instancetype)newWithTitle:(NSString *)title target:(id)target level:(NSInteger)level;
++ (id)newWithTitle:(NSString *)title target:(id)target level:(NSInteger)level;
+
+- (id)initWithTitle:(NSString *)title target:(id)target level:(NSInteger)level;
 
 @property (nonatomic, assign, readonly) NSInteger level;
 @property (nonatomic, strong, readwrite) NSMutableArray *children;
