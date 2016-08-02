@@ -100,8 +100,6 @@ not sure if this is correct, it creates a second application tag in the manifest
         <source-file src="src/ios/vfr/ReaderMainPagebar.m"/>
         <header-file src="src/ios/vfr/ReaderMainToolbar.h"/>
         <source-file src="src/ios/vfr/ReaderMainToolbar.m"/>
-        <header-file src="src/ios/vfr/ReaderMainToolbar+SDVReaderMainToolbarPassThrough.h"/>
-        <source-file src="src/ios/vfr/ReaderMainToolbar+SDVReaderMainToolbarPassThrough.m"/>
         <header-file src="src/ios/vfr/ReaderThumbCache.h"/>
         <source-file src="src/ios/vfr/ReaderThumbCache.m"/>
         <header-file src="src/ios/vfr/ReaderThumbFetch.h"/>
@@ -118,28 +116,10 @@ not sure if this is correct, it creates a second application tag in the manifest
         <source-file src="src/ios/vfr/ReaderThumbView.m"/>
         <header-file src="src/ios/vfr/ReaderViewController.h"/>
         <source-file src="src/ios/vfr/ReaderViewController.m"/>
-        <header-file src="src/ios/vfr/ReaderViewController+SDVReaderViewControllerPassThrough.h"/>
-        <source-file src="src/ios/vfr/ReaderViewController+SDVReaderViewControllerPassThrough.m"/>
-        <header-file src="src/ios/vfr/SDVReaderContentViewDoublePage.h"/>
-        <source-file src="src/ios/vfr/SDVReaderContentViewDoublePage.m"/>
-        <header-file src="src/ios/vfr/SDVReaderMainPagebar.h"/>
-        <source-file src="src/ios/vfr/SDVReaderMainPagebar.m"/>
-        <header-file src="src/ios/vfr/SDVReaderMainToolbar.h"/>
-        <source-file src="src/ios/vfr/SDVReaderMainToolbar.m"/>
-        <header-file src="src/ios/vfr/SDVReaderViewController.h"/>
-        <source-file src="src/ios/vfr/SDVReaderViewController.m"/>
-        <header-file src="src/ios/vfr/SDVThumbsMainToolbar.h"/>
-        <source-file src="src/ios/vfr/SDVThumbsMainToolbar.m"/>
-        <header-file src="src/ios/vfr/SDVThumbsViewController.h"/>
-        <source-file src="src/ios/vfr/SDVThumbsViewController.m"/>
         <header-file src="src/ios/vfr/ThumbsMainToolbar.h"/>
         <source-file src="src/ios/vfr/ThumbsMainToolbar.m"/>
-        <header-file src="src/ios/vfr/ThumbsMainToolbar+SDVThumbsMainToolbarPassThrough.h"/>
-        <source-file src="src/ios/vfr/ThumbsMainToolbar+SDVThumbsMainToolbarPassThrough.m"/>
         <header-file src="src/ios/vfr/ThumbsViewController.h"/>
         <source-file src="src/ios/vfr/ThumbsViewController.m"/>
-        <header-file src="src/ios/vfr/ThumbsViewController+SDVThumbsViewControllerPassThrough.h"/>
-        <source-file src="src/ios/vfr/ThumbsViewController+SDVThumbsViewControllerPassThrough.m"/>
         <header-file src="src/ios/vfr/UIXToolbarView.h"/>
         <source-file src="src/ios/vfr/UIXToolbarView.m"/>
 
