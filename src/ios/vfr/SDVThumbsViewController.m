@@ -105,14 +105,6 @@
         scrollViewInsets.top = TOOLBAR_HEIGHT;
     }
     
-    //get last selected mode (key value coding quick and dirty)
-    NSInteger lastSelected = [[mainToolbar valueForKey:@"lastSelected"] integerValue];
-    
-    theThumbsView = [[ReaderThumbsView alloc] initWithFrame:scrollViewRect]; // ReaderThumbsView
-    theThumbsView.contentInset = scrollViewInsets; theThumbsView.scrollIndicatorInsets = scrollViewInsets;
-    theThumbsView.delegate = self; // ReaderThumbsViewDelegate
-    theThumbsView.hidden = YES;
-    
     theOutlineView = [[UITableView alloc] initWithFrame:scrollViewRect]; //TableView for Document outline
     theOutlineView.delegate = self;
     theOutlineView.dataSource = self;
@@ -149,7 +141,24 @@
 {
     //go to associated page
     //copied and modified from didSelectThumbWithIndex
-    [self.delegate thumbsViewController:self gotoPage:[[[documentOutline objectAtIndex:indexPath.row] target] integerValue]]; // Show the selected page
+    DocumentOutlineEntry *outlineEntry = [documentOutline objectAtIndex:indexPath.row];
+    
+    if ([outlineEntry.target isKindOfClass:[NSDictionary class]])
+    {
+        // Display new PDF at a specific page
+        NSLog(@"Outline target is NSDictionary");
+    }
+    else if ([outlineEntry.target isKindOfClass:[NSString class]])
+    {
+        // Display new PDF
+        // Notify application to let app give new PDF location
+        
+    }
+    else
+    {
+        // Show the selected page in current PDF
+        [self.delegate thumbsViewController:self gotoPage:[outlineEntry.target integerValue]];
+    }
     [self.delegate dismissThumbsViewController:self]; // Dismiss thumbs display
 }
 
